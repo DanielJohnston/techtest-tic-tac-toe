@@ -10,6 +10,7 @@ class Game
   end
 
   def play across, down
+    raise 'Game over' if game_over?
     raise 'Outside of the board' unless inside_board?(across, down)
     raise 'Space already taken' if @board[across][down]
     @board[across][down] = @turn
@@ -39,7 +40,15 @@ class Game
     false
   end
 
+  def game_over?
+    three_in_a_row? || board_full?
+  end
+
   private
+
+  def board_full?
+    @board.flatten.count(nil) == 0
+  end
 
   def all_x_or_o? fields
     fields.all?{ |field| field == :x } || fields.all?{ |field| field == :o }

@@ -60,6 +60,11 @@ describe Game do
       subject.play(1, 1)
       expect(subject.board[1][1]).to eq :o
     end
+
+    it 'cannot play when the game is over' do
+      allow(subject).to receive(:game_over?) { true }
+      expect{ subject.play(0, 0) }.to raise_error 'Game over'
+    end
   end
 
   describe '#whose_turn' do
@@ -153,6 +158,48 @@ describe Game do
       subject.play(2, 1)
       subject.play(2, 2)
       expect(subject.winner).to be :x
+    end
+  end
+
+  describe '#game_over?' do
+    it 'returns false at the beginning of the game' do
+      expect(subject).to_not be_game_over
+    end
+
+    it 'returns false in mid-game' do
+      subject.play(0, 0)
+      subject.play(0, 1)
+      subject.play(1, 0)
+      subject.play(1, 1)
+      expect(subject).to_not be_game_over
+    end
+
+    it 'returns true when X has three in a row' do
+      subject.play(0, 0)
+      subject.play(0, 1)
+      subject.play(1, 0)
+      subject.play(1, 1)
+      subject.play(2, 0)
+      expect(subject).to be_game_over
+    end
+
+    it 'returns true when O has three in a row' do
+      subject.play(0, 0)
+      subject.play(1, 0)
+      subject.play(0, 2)
+      subject.play(1, 1)
+      subject.play(2, 0)
+      subject.play(1, 2)
+      expect(subject).to be_game_over
+    end
+
+    it 'returns true when the board is full' do
+      [1, 2, 0].each_with_index do |across|
+        (0..2).each_with_index do |down|
+          subject.play across, down
+        end
+      end
+      expect(subject).to be_game_over
     end
   end
 end

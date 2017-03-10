@@ -10,8 +10,8 @@ The rules of tic-tac-toe are as follows:
 - [x] A player can claim a field if it is not already taken
 - [x] A turn ends when a player claims a field
 - [x] A player wins if they claim all the fields in a row, column or diagonal
-- [ ] A game is over if a player wins
-- [ ] A game is over when all fields are taken
+- [x] A game is over if a player wins
+- [x] A game is over when all fields are taken
 
 Build the business logic for a game of tic tac toe. It should be easy to implement a working game of tic tac toe by combining your code with any user interface, whether web or command line.
 
@@ -27,7 +27,7 @@ The development priorities and completion status are:
 
 - [x] Initial setup and feature test
 - [x] Decide on representation of the game board
-- [ ] Creation of working tic tac toe
+- [x] Creation of working tic tac toe
 - [ ] Refactoring the game into a cleaner structure
 - [ ] Extra functionality
 

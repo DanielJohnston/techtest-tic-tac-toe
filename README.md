@@ -5,13 +5,13 @@ Tech test from Makers Academy - modelling a two player game of Tic Tac Toe
 
 The rules of tic-tac-toe are as follows:
 
-* There are two players in the game (X and O)
-* Players take turns until the game is over
-* A player can claim a field if it is not already taken
-* A turn ends when a player claims a field
-* A player wins if they claim all the fields in a row, column or diagonal
-* A game is over if a player wins
-* A game is over when all fields are taken
+- [x] There are two players in the game (X and O)
+- [x] Players take turns until the game is over
+- [x] A player can claim a field if it is not already taken
+- [x] A turn ends when a player claims a field
+- [ ] A player wins if they claim all the fields in a row, column or diagonal
+- [ ] A game is over if a player wins
+- [ ] A game is over when all fields are taken
 
 Build the business logic for a game of tic tac toe. It should be easy to implement a working game of tic tac toe by combining your code with any user interface, whether web or command line.
 
@@ -26,9 +26,9 @@ The game was developed using a TDD approach. As the spec does not require a UI, 
 The development priorities and completion status are:
 
 - [x] Initial setup and feature test
-- [ ] Decide on representation of the game board
+- [x] Decide on representation of the game board
 - [ ] Creation of working tic tac toe
 - [ ] Refactoring the game into a cleaner structure
 - [ ] Extra functionality
 
-In terms of representation, there are some physical characteristics of the game that are useful to enforce in the structure of the model. Specifically, each slot in the board occupies a unique position in physical space, the slots form a complete grid of (usually) 3 across and down and no more, and each slot can only be empty, O or X. The #board method should return a representation of the board that's complete enough for a UI or command line user to understand which slots are which, and whether each of them is blank, X or O. Initially, an array with a subarray for each row appears sensible.
+In terms of representation, there are some physical characteristics of the game that are useful to enforce in the structure of the model. Specifically, each field in the board occupies a unique position in physical space, the fields form a complete grid of (usually) 3 across and down and no more, and each field can only be empty, O or X. The #board method should return a representation of the board that's complete enough for a UI or command line user to understand which fields are which, and whether each of them is blank, X or O. Initially, an array with a subarray for each row appears sensible.

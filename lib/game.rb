@@ -12,7 +12,7 @@ class Game
   def play across, down
     raise 'Outside of the board' unless inside_board?(across, down)
     raise 'Space already taken' if @board[across][down]
-    @board[across][down] = :x
+    @board[across][down] = @turn
     switch_turns
   end
 

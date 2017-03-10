@@ -42,9 +42,22 @@ describe Game do
       expect{ subject.play(0, -1) }.to raise_error 'Outside of the board'
     end
 
-    it 'cannot play a move in an already played slot' do
+    it 'cannot play a move in an already played field' do
       subject.play(0, 0)
       expect{ subject.play(0, 0) }.to raise_error 'Space already taken'
+    end
+
+    it 'stores an :x when player X plays' do
+      subject.play(0, 0)
+      subject.play(1, 1)
+      subject.play(2, 2)
+      expect(subject.board[2][2]).to eq :x
+    end
+
+    it 'stores an :o when player O plays' do
+      subject.play(0, 0)
+      subject.play(1, 1)
+      expect(subject.board[1][1]).to eq :o
     end
   end
 

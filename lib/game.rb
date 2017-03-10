@@ -20,7 +20,30 @@ class Game
     @turn
   end
 
+  def three_in_a_row? player = :all
+    # Check for either player if neither is given
+    return three_in_a_row?(:x) || three_in_a_row?(:o) if player == :all
+    # Check horizontals
+    return true if @board.any? { |row| row.all? { |field| field == player }}
+    # Check verticals
+    return true if @board.transpose.any? { |column| column.all? { |field| field == player }}
+    # Check diagonals
+    return true if (0..2).collect{ |i| @board[i][i] }.all? { |field| field == player }
+    return true if (0..2).collect{ |i| @board[2-i][i] }.all? { |field| field == player }
+    false
+  end
+
+  def winner
+    return :x if three_in_a_row? :x
+    return :o if three_in_a_row? :o
+    false
+  end
+
   private
+
+  def all_x_or_o? fields
+    fields.all?{ |field| field == :x } || fields.all?{ |field| field == :o }
+  end
 
   def switch_turns
     if @turn == :x

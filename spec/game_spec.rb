@@ -25,5 +25,18 @@ describe Game do
       subject.play(1, 1)
       expect(subject.board).to eq [[nil, nil, nil], [nil, :x, nil], [nil, nil, nil]]
     end
+
+    it 'cannot play a move to the right of the board area' do
+      expect{ subject.play(3, 0) }.to raise_error 'Outside of the board'
+    end
+    it 'cannot play a move below the board area' do
+      expect{ subject.play(0, 3) }.to raise_error 'Outside of the board'
+    end
+    it 'cannot play a move to the left of the board area' do
+      expect{ subject.play(-1, 0) }.to raise_error 'Outside of the board'
+    end
+    it 'cannot play a move above the board area' do
+      expect{ subject.play(0, -1) }.to raise_error 'Outside of the board'
+    end
   end
 end

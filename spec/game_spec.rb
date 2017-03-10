@@ -29,14 +29,22 @@ describe Game do
     it 'cannot play a move to the right of the board area' do
       expect{ subject.play(3, 0) }.to raise_error 'Outside of the board'
     end
+    
     it 'cannot play a move below the board area' do
       expect{ subject.play(0, 3) }.to raise_error 'Outside of the board'
     end
+
     it 'cannot play a move to the left of the board area' do
       expect{ subject.play(-1, 0) }.to raise_error 'Outside of the board'
     end
+
     it 'cannot play a move above the board area' do
       expect{ subject.play(0, -1) }.to raise_error 'Outside of the board'
+    end
+
+    it 'cannot play a move in an already played slot' do
+      subject.play(0, 0)
+      expect{ subject.play(0, 0) }.to raise_error 'Space already taken'
     end
   end
 end

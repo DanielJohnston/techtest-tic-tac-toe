@@ -29,7 +29,7 @@ describe Game do
     it 'cannot play a move to the right of the board area' do
       expect{ subject.play(3, 0) }.to raise_error 'Outside of the board'
     end
-    
+
     it 'cannot play a move below the board area' do
       expect{ subject.play(0, 3) }.to raise_error 'Outside of the board'
     end
@@ -45,6 +45,21 @@ describe Game do
     it 'cannot play a move in an already played slot' do
       subject.play(0, 0)
       expect{ subject.play(0, 0) }.to raise_error 'Space already taken'
+    end
+  end
+
+  describe '#whose_turn' do
+    it 'begins with player X' do
+      expect(subject.whose_turn).to eq :x
+    end
+    it 'switches to player O after 1 turn' do
+      subject.play(0, 0)
+      expect(subject.whose_turn).to eq :o
+    end
+    it 'switches back to player X after 2 turns' do
+      subject.play(0, 0)
+      subject.play(1, 1)
+      expect(subject.whose_turn).to eq :x
     end
   end
 end

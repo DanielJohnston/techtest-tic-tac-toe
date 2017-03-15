@@ -1,6 +1,5 @@
-require 'board'
 class Game
-  def initialize board = Board.new
+  def initialize board
     @board = board
     @turn = :x
   end

@@ -1,57 +1,16 @@
 require 'game'
-# require 'pry'
 
 describe Game do
-# NOTE: game.board becomes board.state in all code
+  subject { Game.new(board) }
+  let(:board) { double(:board) }
 
   describe '#play' do
-    # it 'accepts a move' do
-    #   expect { subject.play(0, 0) }.not_to raise_error
-    # end
-    #
-    # it 'updates the board state when X is played in top left' do
-    #   subject.play(0, 0)
-    #   expect(subject.board).to eq [[:x, nil, nil], [nil, nil, nil], [nil, nil, nil]]
-    # end
-    #
-    # it 'updates the board state when X is played in the middle' do
-    #   subject.play(1, 1)
-    #   expect(subject.board).to eq [[nil, nil, nil], [nil, :x, nil], [nil, nil, nil]]
-    # end
-    #
-    # it 'cannot play a move to the right of the board area' do
-    #   expect{ subject.play(3, 0) }.to raise_error 'Outside of the board'
-    # end
-    #
-    # it 'cannot play a move below the board area' do
-    #   expect{ subject.play(0, 3) }.to raise_error 'Outside of the board'
-    # end
-    #
-    # it 'cannot play a move to the left of the board area' do
-    #   expect{ subject.play(-1, 0) }.to raise_error 'Outside of the board'
-    # end
-    #
-    # it 'cannot play a move above the board area' do
-    #   expect{ subject.play(0, -1) }.to raise_error 'Outside of the board'
-    # end
-    #
-    # it 'cannot play a move in an already played field' do
-    #   subject.play(0, 0)
-    #   expect{ subject.play(0, 0) }.to raise_error 'Space already taken'
-    # end
-    #
-    # it 'stores an :x when player X plays' do
-    #   subject.play(0, 0)
-    #   subject.play(1, 1)
-    #   subject.play(2, 2)
-    #   expect(subject.board[2][2]).to eq :x
-    # end
-    #
-    # it 'stores an :o when player O plays' do
-    #   subject.play(0, 0)
-    #   subject.play(1, 1)
-    #   expect(subject.board[1][1]).to eq :o
-    # end
+    it 'accepts and passes on a move' do
+      allow(board).to receive(:line_filled?).and_return false
+      allow(board).to receive(:full?).and_return false
+      expect(board).to receive(:place).with(:x, 0, 0)
+      subject.play(0, 0)
+    end
 
     it 'cannot play when the game is over' do
       allow(subject).to receive(:game_over?) { true }
@@ -65,132 +24,56 @@ describe Game do
     end
 
     it 'switches to player O after 1 turn' do
+      allow(board).to receive(:place)
+      allow(subject).to receive(:game_over?) { false }
       subject.play(0, 0)
       expect(subject.whose_turn).to eq :o
     end
 
     it 'switches back to player X after 2 turns' do
+      allow(board).to receive(:place)
+      allow(subject).to receive(:game_over?) { false }
       subject.play(0, 0)
       subject.play(1, 1)
       expect(subject.whose_turn).to eq :x
     end
   end
 
-  # describe '#three_in_a_row' do
-  #   it 'is false at the beginning' do
-  #     expect(subject).not_to be_three_in_a_row
-  #   end
-  #
-  #   it 'is false when a complete game is played with no three-in-a-row' do
-  #     [1, 2, 0].each_with_index do |across|
-  #       (0..2).each_with_index do |down|
-  #         subject.play across, down
-  #       end
-  #     end
-  #     expect(subject.three_in_a_row?).to be false
-  #   end
-  #
-  #   it '(:x) is true when X plays three in a row horizontally' do
-  #     subject.play(0, 0)
-  #     subject.play(0, 1)
-  #     subject.play(1, 0)
-  #     subject.play(1, 1)
-  #     subject.play(2, 0)
-  #     expect(subject.three_in_a_row?(:x)).to be true
-  #   end
-  #
-  #   it '(:o) is true when O plays three in a row vertically' do
-  #     subject.play(0, 0)
-  #     subject.play(1, 0)
-  #     subject.play(0, 2)
-  #     subject.play(1, 1)
-  #     subject.play(2, 0)
-  #     subject.play(1, 2)
-  #     expect(subject.three_in_a_row?(:o)).to be true
-  #   end
-  #
-  #   it '(:x) is true when X plays three in a row diagonally' do
-  #     subject.play(0, 0)
-  #     subject.play(1, 0)
-  #     subject.play(1, 1)
-  #     subject.play(2, 1)
-  #     subject.play(2, 2)
-  #     expect(subject.three_in_a_row?(:x)).to be true
-  #   end
-  # end
-
   describe '#winner' do
     it 'returns false at the beginning of the game' do
+      allow(board).to receive(:line_filled?).and_return false
       expect(subject.winner).to be false
     end
 
-    it 'returns :x when X plays three in a row horizontally' do
-      subject.play(0, 0)
-      subject.play(0, 1)
-      subject.play(1, 0)
-      subject.play(1, 1)
-      subject.play(2, 0)
+    it 'returns :x when X has a filled line' do
+      allow(board).to receive(:line_filled?).with(:x).and_return true
+      allow(board).to receive(:line_filled?).with(:o).and_return false
       expect(subject.winner).to be :x
     end
 
-    it 'returns :o when O plays three in a row vertically' do
-      subject.play(0, 0)
-      subject.play(1, 0)
-      subject.play(0, 2)
-      subject.play(1, 1)
-      subject.play(2, 0)
-      subject.play(1, 2)
+    it 'returns :y when Y has a filled line' do
+      allow(board).to receive(:line_filled?).with(:x).and_return false
+      allow(board).to receive(:line_filled?).with(:o).and_return true
       expect(subject.winner).to be :o
-    end
-
-    it 'returns :x when X plays three in a row diagonally' do
-      subject.play(0, 0)
-      subject.play(1, 0)
-      subject.play(1, 1)
-      subject.play(2, 1)
-      subject.play(2, 2)
-      expect(subject.winner).to be :x
     end
   end
 
   describe '#game_over?' do
-    it 'returns false at the beginning of the game' do
+    it 'returns false when the board has nothing all in a line and is not full' do
+      allow(board).to receive(:line_filled?).and_return false
+      allow(board).to receive(:full?).and_return false
       expect(subject).to_not be_game_over
     end
 
-    it 'returns false in mid-game' do
-      subject.play(0, 0)
-      subject.play(0, 1)
-      subject.play(1, 0)
-      subject.play(1, 1)
-      expect(subject).to_not be_game_over
-    end
-
-    it 'returns true when X has three in a row' do
-      subject.play(0, 0)
-      subject.play(0, 1)
-      subject.play(1, 0)
-      subject.play(1, 1)
-      subject.play(2, 0)
-      expect(subject).to be_game_over
-    end
-
-    it 'returns true when O has three in a row' do
-      subject.play(0, 0)
-      subject.play(1, 0)
-      subject.play(0, 2)
-      subject.play(1, 1)
-      subject.play(2, 0)
-      subject.play(1, 2)
+    it 'returns true when a player has a full line' do
+      allow(board).to receive(:line_filled?).and_return true
+      allow(board).to receive(:full?).and_return false
       expect(subject).to be_game_over
     end
 
     it 'returns true when the board is full' do
-      [1, 2, 0].each_with_index do |across|
-        (0..2).each_with_index do |down|
-          subject.play across, down
-        end
-      end
+      allow(board).to receive(:line_filled?).and_return false
+      allow(board).to receive(:full?).and_return true
       expect(subject).to be_game_over
     end
   end
